@@ -5,9 +5,9 @@
  * @author Philip Lawrence <philip@misterphilip.com>
  * @link http://misterphilip.com
  * @link http://tagpla.net
- * @link https://github.com/TagPlanet/yii-analytics
+ * @link https://github.com/TagPlanet/yii-analytics-ga
  * @copyright Copyright &copy; 2012 Philip Lawrence
- * @license http://www.apache.org/licenses/LICENSE-2.0
+ * @license http://tagpla.net/licenses/MIT.txt
  * @version 1.0.2
  */
 class TPGoogleAnalytics extends CApplicationComponent
@@ -215,7 +215,7 @@ class TPGoogleAnalytics extends CApplicationComponent
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 // Google Analytics Extension provided by TagPla.net
-// https://github.com/TagPlanet/yii-analytics
+// https://github.com/TagPlanet/yii-analytics-ga
 // Copyright 2012, TagPla.net & Philip Lawrence
 EOJS;
             // Should we auto add in the analytics tag?
