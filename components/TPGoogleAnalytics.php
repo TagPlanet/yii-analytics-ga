@@ -8,7 +8,7 @@
  * @link https://github.com/TagPlanet/yii-analytics-ga
  * @copyright Copyright &copy; 2012 Philip Lawrence
  * @license http://tagpla.net/licenses/MIT.txt
- * @version 1.0.2
+ * @version 1.0.3-dev
  */
 class TPGoogleAnalytics extends CApplicationComponent
 {
@@ -130,6 +130,10 @@ class TPGoogleAnalytics extends CApplicationComponent
         if($this->_accountID !== null)
         {
             $this->_setAccount($this->_accountID);
+        }
+        else
+        {
+            throw new CException('Invalid Account ID for TPGoogleAnalytics');
         }
     }
 
