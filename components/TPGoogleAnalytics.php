@@ -166,74 +166,71 @@ class TPGoogleAnalytics extends CApplicationComponent
      */
     public function render()
     {
-        if($this->_accountID !== null)
+        // Check to see if we need to throw in the trackPageview call
+        if(!in_array('_trackPageview', $this->_calledOptions) && $this->autoPageview)
         {
-            // Check to see if we need to throw in the trackPageview call
-            if(!in_array('_trackPageview', $this->_calledOptions) && $this->autoPageview)
+            $this->_trackPageview();
+        }
+        
+        // Get the prefix information
+        if($this->prefix != '')
+        {
+            if(strpos($this->prefix, '.') === false)
             {
-                $this->_trackPageview();
+                $this->prefix .= '.';
             }
+        }
+        else
+        {
+            $this->prefix = '';
+        }
+
+        // Start the JS string
+        $js = 'var _gaq = _gaq || [];' . PHP_EOL;
+        foreach($this->_data as $data)
+        {
+            // No prefixes for the first argument.
+            $prefixed = false;
             
-            // Get the prefix information
-            if($this->prefix != '')
+            // Clean up each item
+            foreach($data as $key => $item)
             {
-                if(strpos($this->prefix, '.') === false)
-                {
-                    $this->prefix .= '.';
-                }
-            }
-            else
-            {
-                $this->prefix = '';
-            }
-
-            // Start the JS string
-            $js = 'var _gaq = _gaq || [];' . PHP_EOL;
-            foreach($this->_data as $data)
-            {
-                // No prefixes for the first argument.
-                $prefixed = false;
                 
-                // Clean up each item
-                foreach($data as $key => $item)
+                if(is_string($item))
                 {
-                    
-                    if(is_string($item))
-                    {
-                        $data[$key] = self::Q . ((!$prefixed) ? $this->prefix : '') . preg_replace('~(?<!\\\)'. self::Q . '~', '\\' . (($prefixed) ? $this->prefix : '') . self::Q, $item) . self::Q;
-                    }
-                    else if(is_bool($item))
-                    {
-                        $data[$key] = ($item) ? 'true' : 'false';
-                    }
-                    
-                    $prefixed = true;
+                    $data[$key] = self::Q . ((!$prefixed) ? $this->prefix : '') . preg_replace('~(?<!\\\)'. self::Q . '~', '\\' . (($prefixed) ? $this->prefix : '') . self::Q, $item) . self::Q;
                 }
-
-                $js.= '_gaq.push([' . implode(',', $data) . ']);' . PHP_EOL;
+                else if(is_bool($item))
+                {
+                    $data[$key] = ($item) ? 'true' : 'false';
+                }
+                
+                $prefixed = true;
             }
-            $js.= <<<EOJS
+
+            $js.= '_gaq.push([' . implode(',', $data) . ']);' . PHP_EOL;
+        }
+        $js.= <<<EOJS
 (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 // Google Analytics Extension provided by TagPla.net
 // https://github.com/TagPlanet/yii-analytics-ga
 // Copyright 2012, TagPla.net & Philip Lawrence
 EOJS;
-            // Should we auto add in the analytics tag?
-            if($this->autoRender)
-            {
-                Yii::app()->clientScript
-                        ->registerScript('TPGoogleAnalytics', $js, CClientScript::POS_HEAD);
-            }
-            else
-            {
-                return $js;
-            }
+        // Should we auto add in the analytics tag?
+        if($this->autoRender)
+        {
+            Yii::app()->clientScript
+                    ->registerScript('TPGoogleAnalytics', $js, CClientScript::POS_HEAD);
+            return;
         }
-        return false;
+        else
+        {
+            return $js;
+        }
     }
 
     /**
