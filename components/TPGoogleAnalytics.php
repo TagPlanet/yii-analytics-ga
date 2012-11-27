@@ -47,6 +47,13 @@ class TPGoogleAnalytics extends CApplicationComponent
      * @var bool
      */
     public $renderMobile = false;
+    
+    /**
+     * Use the ga_debug.js instead of ga.js to receive errors and warnings in the window.console
+     * Per: https://developers.google.com/analytics/resources/articles/gaTrackingTroubleshooting#gaDebug
+     * @var bool
+     */
+    public $debug = false;
 
     /**
      * Type of quotes to use for values
@@ -208,10 +215,14 @@ class TPGoogleAnalytics extends CApplicationComponent
 
                 $js.= '_gaq.push([' . implode(',', $data) . ']);' . PHP_EOL;
             }
+            
+            //Set the debug url?
+            $url = $this->debug ? 'u/ga_debug.js' : 'ga.js';
+            
             $js.= <<<EOJS
 (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/{$url}';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 // Google Analytics Extension provided by TagPla.net
