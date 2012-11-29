@@ -265,7 +265,12 @@ EOJS;
             $name = '_' . $name;
         if(in_array($name, $this->_availableOptions))
         {
-            $this->_debug('Setting method "' . $name . '" with arguements: ' . print_r($arguements, true));
+            // Clean up the debugging a bit
+            if(is_array($arguments))
+                $this->_debug('Setting method "' . $name . '" with arguments: "' . implode('", "', $arguments) . '"');
+            else
+                $this->_debug('Setting method "' . $name . '" with argument: "' . $arguments .'"');
+            
             $this->_push($name, $arguments);
             return true;
         }
