@@ -235,11 +235,15 @@ class TPGoogleAnalytics extends CApplicationComponent
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/{$url}';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
+EOJS;
+        }
+        
+        // Include the copyright
+        $js.= <<<EOCOPY
 // Google Analytics Extension provided by TagPla.net
 // https://github.com/TagPlanet/yii-analytics-ga
 // Copyright 2012, TagPla.net & Philip Lawrence
-EOJS;
-        }
+EOCOPY;
         
         // Should we auto add in the analytics tag?
         if($this->autoRender)
