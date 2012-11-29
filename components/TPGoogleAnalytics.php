@@ -55,7 +55,13 @@ class TPGoogleAnalytics extends CApplicationComponent
      * Per: https://developers.google.com/analytics/resources/articles/gaTrackingTroubleshooting#gaDebug
      * @var bool
      */
-    public $debug = false;
+    public $debug = false;    
+    
+    /**
+     * Enable or disable the inclusion of the Google Analytics output
+     * @var bool
+     */
+    public $includeFile = true;
 
     /**
      * Type of quotes to use for values
@@ -217,6 +223,9 @@ class TPGoogleAnalytics extends CApplicationComponent
             $js.= '_gaq.push([' . implode(',', $data) . ']);' . PHP_EOL;
         }
         
+        // Check to see if we should include the file or not
+        if($this->includeFile)
+        {
             //Set the debug url?
             $url = $this->debug ? 'u/ga_debug.js' : 'ga.js';
                 
@@ -230,6 +239,7 @@ class TPGoogleAnalytics extends CApplicationComponent
 // https://github.com/TagPlanet/yii-analytics-ga
 // Copyright 2012, TagPla.net & Philip Lawrence
 EOJS;
+        }
         
         // Should we auto add in the analytics tag?
         if($this->autoRender)
