@@ -8,7 +8,7 @@
  * @link https://github.com/TagPlanet/yii-analytics-ga
  * @copyright Copyright &copy; 2012 Philip Lawrence
  * @license http://tagpla.net/licenses/MIT.txt
- * @version 1.0.3-dev
+ * @version 1.0.3
  */
 class TPGoogleAnalytics extends CApplicationComponent
 {
