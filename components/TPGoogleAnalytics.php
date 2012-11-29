@@ -49,7 +49,9 @@ class TPGoogleAnalytics extends CApplicationComponent
     public $renderMobile = false;
     
     /**
-     * Use the ga_debug.js instead of ga.js to receive errors and warnings in the window.console
+     * Enable / disable debug mode
+     * 
+     * Includes extra Yii logging and uses the ga_debug.js instead of ga.js to receive errors and warnings in the window.console
      * Per: https://developers.google.com/analytics/resources/articles/gaTrackingTroubleshooting#gaDebug
      * @var bool
      */
@@ -79,9 +81,6 @@ class TPGoogleAnalytics extends CApplicationComponent
         '_cookiePathCopy',
         '_createTracker',
         '_deleteCustomVar',
-        # @TODO: Allow for the link* methods to be called
-        #'_link',
-        #'_linkByPost',
         '_setAccount',
         '_setAllowAnchor',
         '_setAllowLinker',
@@ -160,7 +159,7 @@ class TPGoogleAnalytics extends CApplicationComponent
             }
             else
             {
-                Yii::log('Invalid Google Analytics account ID', 'warning','application.components.googleAnalytics');
+                Yii::log('Invalid Google Analytics account ID', 'warning', 'application.components.googleAnalytics');
             }
         }
         return $account;
@@ -217,11 +216,11 @@ class TPGoogleAnalytics extends CApplicationComponent
 
             $js.= '_gaq.push([' . implode(',', $data) . ']);' . PHP_EOL;
         }
-            
+        
             //Set the debug url?
             $url = $this->debug ? 'u/ga_debug.js' : 'ga.js';
-            
-        $js.= <<<EOJS
+                
+            $js.= <<<EOJS
 (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/{$url}';
@@ -231,6 +230,7 @@ class TPGoogleAnalytics extends CApplicationComponent
 // https://github.com/TagPlanet/yii-analytics-ga
 // Copyright 2012, TagPla.net & Philip Lawrence
 EOJS;
+        
         // Should we auto add in the analytics tag?
         if($this->autoRender)
         {
@@ -255,9 +255,12 @@ EOJS;
             $name = '_' . $name;
         if(in_array($name, $this->_availableOptions))
         {
+            $this->_debug('Setting method "' . $name . '" with arguements: ' . print_r($arguements, true));
             $this->_push($name, $arguments);
             return true;
         }
+        
+        $this->_debug('Method "' . $name . '" does not exist and cannot be called', 'warning');
         return false;
     }
 
@@ -272,5 +275,19 @@ EOJS;
         $data = array_merge(array($variable), $arguments);
         array_push($this->_data, $data);
         $this->_calledOptions[] = $variable;
+    }
+    
+    /**
+     * Output debugging, if enabled
+     * @param string $message
+     * @param string $level
+     * @protected
+     */
+    protected function _debug($message = '', $level = 'info')
+    {
+        if($this->debug)
+        {
+            Yii::log($message, $level, 'ext.TPGoogleAnalytics.components.TPGoogleAnalytics');
+        }
     }
 }
