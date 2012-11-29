@@ -65,7 +65,7 @@ This component allows for some flexibility within the configuration section. Bel
     * Type: string
     * Format:  `UA-########-#`
     * Default: (none)
-  * **autoRender** - Automatically render the Google Analytics code in the head. If you do set this to true, you will need to update your controller's `beforeRender` method (see:[GoogleAnalyticsInstallation#Step_3:_(Optional)_Add_in_auto-render Optionally adding in auto-render code])
+  * **autoRender** - Automatically render the Google Analytics code in the head. If you do set this to true, you will need to update your controller's `beforeRender` method (see:[Optionally adding in auto-render code](https://github.com/TagPlanet/yii-analytics-ga/wiki/Install))
     * Required: no
     * Type: boolean
     * Recommend Setting: true
@@ -75,7 +75,7 @@ This component allows for some flexibility within the configuration section. Bel
     * Type: boolean
     * Recommend Setting: true
     * Default: true
-  * **debug** - Changes Google's JS to their (ga_debug.js file)[https://developers.google.com/analytics/resources/articles/gaTrackingTroubleshooting#gaDebug] and includes Yii debugging
+  * **debug** - Changes Google's JS to their [ga_debug.js file](https://developers.google.com/analytics/resources/articles/gaTrackingTroubleshooting#gaDebug) and includes Yii debugging
     * Required: no
     * Type: boolean
     * Recommend Setting: false (in production, true in development)
@@ -85,7 +85,7 @@ This component allows for some flexibility within the configuration section. Bel
     * Type: boolean
     * Recommend Setting: true
     * Default: true
-  * **prefix** - Allow for multiple instances of Google Analytics on the page via namespacing in the JavaScript. See (Google's Docs)[https://developers.google.com/analytics/devguides/collection/gajs/#MultipleCommands] for more information.
+  * **prefix** - Allow for multiple instances of Google Analytics on the page via namespacing in the JavaScript. See [Google's Docs](https://developers.google.com/analytics/devguides/collection/gajs/#MultipleCommands) for more information.
     * Required: no
     * Type: string
     * Recommend Setting: ''
