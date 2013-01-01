@@ -242,7 +242,7 @@ EOJS;
         $js.= <<<EOCOPY
 // Google Analytics Extension provided by TagPla.net
 // https://github.com/TagPlanet/yii-analytics-ga
-// Copyright 2012, TagPla.net & Philip Lawrence
+// Copyright 2013, TagPla.net & Philip Lawrence
 EOCOPY;
         
         // Should we auto add in the analytics tag?
