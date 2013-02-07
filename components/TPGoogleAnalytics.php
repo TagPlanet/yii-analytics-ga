@@ -6,9 +6,9 @@
  * @link http://misterphilip.com
  * @link http://tagpla.net
  * @link https://github.com/TagPlanet/yii-analytics-ga
- * @copyright Copyright &copy; 2012 Philip Lawrence
+ * @copyright Copyright &copy; 2012 - 2013 Philip Lawrence
  * @license http://tagpla.net/licenses/MIT.txt
- * @version 1.0.3
+ * @version 1.0.4-dev
  */
 class TPGoogleAnalytics extends CApplicationComponent
 {
@@ -242,7 +242,7 @@ EOJS;
         $js.= <<<EOCOPY
 // Google Analytics Extension provided by TagPla.net
 // https://github.com/TagPlanet/yii-analytics-ga
-// Copyright 2013, TagPla.net & Philip Lawrence
+// Copyright 2012 - 2013, TagPla.net & Philip Lawrence
 EOCOPY;
         
         // Should we auto add in the analytics tag?
