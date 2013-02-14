@@ -69,7 +69,7 @@ class TPGoogleAnalytics extends CApplicationComponent
     const Q = "'";
 
     /**
-     * Available options, pulled (May 4, 2012) from
+     * Available options, pulled (Feb 14, 2013) from
      * https://developers.google.com/analytics/devguides/collection/gajs/methods/
      * @var array
      */
@@ -207,17 +207,41 @@ class TPGoogleAnalytics extends CApplicationComponent
             // Clean up each item
             foreach($data as $key => $item)
             {
+                $prefix = '';
                 
-                if(is_string($item))
+                // Do we need to add a custom prefix?
+                if(!$prefixed && $item == '_anonymizeIp')
                 {
-                    $data[$key] = self::Q . ((!$prefixed) ? $this->prefix : '') . preg_replace('~(?<!\\\)'. self::Q . '~', '\\' . (($prefixed) ? $this->prefix : '') . self::Q, $item) . self::Q;
+                    $prefix = 'gat.';
                 }
-                else if(is_bool($item))
+                elseif(!$prefixed)
                 {
-                    $data[$key] = ($item) ? 'true' : 'false';
+                    $prefix = $this->prefix;
                 }
+                
+                // What type of items is this?
+                switch(gettype($item))
+                {
+                    case 'boolean':
+                        $data[$key] = ($item) ? 'true' : 'false';
+                    break;
+                    case 'object':
+                        if(!method_exists($item, '__toString')) break;
+                    case 'string':
+                    case 'integer':
+                    case 'double':
+                        $data[$key] = self::Q . $prefix . preg_replace('~(?<!\\\)'. self::Q . '~', '\\' . (($prefixed) ? $this->prefix : '') . self::Q, (string) $item) . self::Q;
+                    break;
+                    case 'unknown type':
+                    case 'resource':
+                    case 'array':
+                    default:
+                        throw new CException('Invalid type "' . gettype($item) . '"passed into _push'); // RED ALERT!
+                    break;
+                }           
                 
                 $prefixed = true;
+                
             }
 
             $js.= '_gaq.push([' . implode(',', $data) . ']);' . PHP_EOL;
@@ -265,8 +289,13 @@ EOCOPY;
      */
     public function __call($name, $arguments)
     {
+        // Check the name for underscore
         if($name[0] != '_')
+        {
             $name = '_' . $name;
+        }
+
+        // Check to see if we can call it or not
         if(in_array($name, $this->_availableOptions))
         {
             // Clean up the debugging a bit
