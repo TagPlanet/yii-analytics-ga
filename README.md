@@ -2,7 +2,8 @@ yii-analytics-google
 ====================
 
 A Google Analytics Component for Yii. See our [Wiki](https://github.com/TagPlanet/yii-analytics-ga/wiki) for more information. 
-Below will give you an overview of how to install and use the basics of this extension.
+Below will give you an overview of how to install and use the basics of this extension. **Looking for Universal Analytics?** 
+See our latest addition over at [yii-analytics-ua](https://github.com/TagPlanet/yii-analytics-ua).
 
 ## Installation
 
